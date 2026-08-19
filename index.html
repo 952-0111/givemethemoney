@@ -755,7 +755,6 @@
           <button class="icon-btn" id="nextMonth">›</button>
         </div>
         <div class="top-actions">
-          <button class="btn ghost" id="demoBtn">샘플 데이터</button>
           <button class="btn primary" id="addTxBtn">+ 내역 추가</button>
         </div>
       </div>
@@ -1511,31 +1510,6 @@ function deleteSavingsAccount(id){
   saveState(); renderAll(); closeSavingsDrawer(); openSavingsDrawer();
 }
 
-function addSampleData(){
-  if(state.transactions.length && !confirm("현재 데이터가 있어요. 샘플 데이터를 추가할까요?")) return;
-  const y=viewDate.getFullYear(), m=viewDate.getMonth();
-  const d=(n)=>isoDate(y,m,Math.min(n,new Date(y,m+1,0).getDate()));
-  const samples=[
-    ["income",d(1),3120000,"salary","월급"],
-    ["expense",d(2),48500,"food","장보기"],
-    ["expense",d(3),14200,"transport","교통카드"],
-    ["expense",d(5),72000,"shopping","생활용품"],
-    ["expense",d(7),12000,"food","점심"],
-    ["expense",d(10),40000,"health","병원"],
-    ["income",d(12),80000,"extra","중고거래"],
-    ["expense",d(14),28900,"hobby","취미용품"],
-    ["expense",d(18),63500,"food","외식"],
-    ["expense",d(25),92000,"fixed","통신·구독"]
-  ];
-  samples.forEach(s=>state.transactions.push({id:uid(),type:s[0],date:s[1],amount:s[2],category:s[3],memo:s[4],createdAt:new Date().toISOString()}));
-  state.events.push({id:uid(),date:d(15),title:"친구 약속"});
-  if(!(state.savingsAccounts||[]).length){
-    state.savingsAccounts=[
-      {id:uid(),name:"정기적금",bank:"샘플은행",startDate:d(1),endDate:`${y+1}-${String(m+1).padStart(2,"0")}-01`,currentAmount:1000000,monthlyAmount:300000,autoDay:25,expectedAmount:3700000}
-    ];
-  }
-  saveState(); renderAll();
-}
 function saveSettings(){
   state.budget=Number(document.getElementById("monthlyBudgetInput").value)||0;
   document.querySelectorAll(".cat-item").forEach(item=>{
@@ -1589,7 +1563,6 @@ document.getElementById("prevMonth").onclick=()=>{viewDate.setMonth(viewDate.get
 document.getElementById("nextMonth").onclick=()=>{viewDate.setMonth(viewDate.getMonth()+1);renderAll()};
 document.getElementById("addTxBtn").onclick=()=>openTransactionModal();
 document.getElementById("addTxBtn2").onclick=()=>openTransactionModal();
-document.getElementById("demoBtn").onclick=addSampleData;
 document.getElementById("currentSavingsCard").onclick=openSavingsDrawer;
 document.getElementById("searchInput").oninput=renderTxTable;
 document.getElementById("typeFilter").onchange=renderTxTable;
