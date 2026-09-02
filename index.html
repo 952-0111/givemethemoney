@@ -317,6 +317,8 @@
     font-size:13px;
     white-space:nowrap;
   }
+  .dashboard-tx .action-link{padding:4px 2px}
+
   .empty-state{
     color:var(--muted);
     text-align:center;
@@ -577,6 +579,7 @@
     .nav button:before{font-size:18px}
     .nav button[data-tab="dashboard"]:before{content:"⌂"}
     .nav button[data-tab="transactions"]:before{content:"≡"}
+    .nav button[data-tab="analysis"]:before{content:"◫"}
     .nav button[data-tab="settings"]:before{content:"⚙"}
     .sidebar-bottom{display:none}
     .summary-grid{grid-template-columns:repeat(2,1fr)}
@@ -705,6 +708,134 @@
     font-size:11px;
   }
 
+
+  .clickable-tx{cursor:pointer;transition:.15s ease;border-radius:12px;padding-left:6px;padding-right:6px}
+  .clickable-tx:hover{background:#f7f8fb}
+  .analysis-summary{
+    display:grid;
+    grid-template-columns:repeat(4,1fr);
+    gap:14px;
+    margin-bottom:20px;
+  }
+  .analysis-grid{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:20px;
+  }
+  .analysis-wide{grid-column:1/-1}
+  .analysis-card{padding:24px}
+  .analysis-title{
+    display:flex;
+    align-items:flex-start;
+    justify-content:space-between;
+    gap:12px;
+    margin-bottom:20px;
+  }
+  .analysis-title h2{margin:0;font-size:19px;letter-spacing:-.03em}
+  .analysis-title p{margin:5px 0 0;color:var(--muted);font-size:12px}
+  .analysis-total{font-weight:850;font-size:17px;white-space:nowrap}
+  .donut-layout{
+    display:grid;
+    grid-template-columns:210px minmax(0,1fr);
+    gap:24px;
+    align-items:center;
+  }
+  .donut-chart{
+    width:190px;height:190px;border-radius:50%;
+    margin:auto;
+    position:relative;
+    background:#edf0f4;
+  }
+  .donut-chart:after{
+    content:"";
+    position:absolute;
+    inset:39px;
+    background:#fff;
+    border-radius:50%;
+    box-shadow:0 0 0 1px rgba(230,232,237,.5);
+  }
+  .donut-center{
+    position:absolute;
+    inset:0;
+    z-index:2;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+    pointer-events:none;
+  }
+  .donut-center small{color:var(--muted);font-size:11px}
+  .donut-center strong{font-size:19px;margin-top:4px}
+  .analysis-legend{display:flex;flex-direction:column;gap:11px}
+  .legend-row{
+    display:grid;
+    grid-template-columns:12px minmax(0,1fr) auto auto;
+    gap:9px;
+    align-items:center;
+    font-size:13px;
+  }
+  .legend-dot{width:9px;height:9px;border-radius:50%}
+  .legend-name{font-weight:720;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .legend-pct{color:var(--muted);font-size:11px}
+  .legend-amount{font-weight:780;white-space:nowrap}
+  .speed-chart-wrap{
+    width:100%;
+    overflow:hidden;
+    background:#fafbfc;
+    border:1px solid var(--line);
+    border-radius:18px;
+    padding:10px 12px 4px;
+  }
+  .speed-chart-wrap svg{width:100%;height:auto;display:block}
+  .chart-legend-inline{
+    display:flex;gap:18px;align-items:center;justify-content:flex-end;
+    color:var(--muted);font-size:11px;margin-bottom:8px
+  }
+  .chart-key{display:inline-flex;align-items:center;gap:6px}
+  .chart-key i{display:block;width:18px;height:3px;border-radius:999px}
+  .speed-footer{
+    display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:14px
+  }
+  .speed-stat{
+    background:#f7f8fb;border-radius:14px;padding:14px
+  }
+  .speed-stat small{display:block;color:var(--muted);margin-bottom:5px}
+  .speed-stat strong{font-size:18px}
+  .fixed-head{
+    display:flex;align-items:center;justify-content:space-between;gap:12px;
+    margin-bottom:16px
+  }
+  .fixed-list{display:flex;flex-direction:column;gap:10px}
+  .fixed-item{
+    border:1px solid var(--line);border-radius:14px;padding:14px;
+    display:grid;grid-template-columns:minmax(0,1fr) auto;gap:12px;align-items:center
+  }
+  .fixed-item strong{display:block;font-size:14px;margin-bottom:4px}
+  .fixed-item small{color:var(--muted);font-size:11px}
+  .fixed-amount{text-align:right;font-weight:830}
+  .fixed-actions{margin-top:5px;text-align:right}
+  .analysis-empty{
+    min-height:190px;display:flex;align-items:center;justify-content:center;
+    color:var(--muted);font-size:13px
+  }
+  .analysis-month-controls{display:flex;align-items:center;gap:10px}
+  .analysis-month-controls h1{margin:0;font-size:30px;letter-spacing:-.04em}
+  @media(max-width:1100px){
+    .analysis-summary{grid-template-columns:repeat(2,1fr)}
+    .analysis-grid{grid-template-columns:1fr}
+    .analysis-wide{grid-column:auto}
+  }
+  @media(max-width:760px){
+    .analysis-summary{grid-template-columns:1fr 1fr}
+    .donut-layout{grid-template-columns:1fr}
+    .donut-chart{width:170px;height:170px}
+    .donut-chart:after{inset:35px}
+    .speed-footer{grid-template-columns:1fr}
+    .analysis-card{padding:18px}
+    .legend-row{grid-template-columns:12px minmax(0,1fr) auto}
+    .legend-pct{display:none}
+  }
+
 </style>
 </head>
 <body>
@@ -735,8 +866,9 @@
   <aside class="sidebar">
     <div class="brand">MONEY <span>NOTE</span></div>
     <div class="nav">
-      <button class="active" data-tab="dashboard">대시보드</button>
+      <button class="active" data-tab="dashboard">월간가계부</button>
       <button data-tab="transactions">거래내역</button>
+      <button data-tab="analysis">분석</button>
       <button data-tab="settings">설정</button>
     </div>
     <div class="sync-box">
@@ -852,6 +984,86 @@
       </div>
     </section>
 
+
+    <section id="analysisTab" class="hidden">
+      <div class="topbar">
+        <div class="analysis-month-controls">
+          <button class="icon-btn" id="analysisPrevMonth">‹</button>
+          <h1 id="analysisMonthTitle"></h1>
+          <button class="icon-btn" id="analysisNextMonth">›</button>
+        </div>
+        <div style="color:var(--muted);font-size:12px">월별 흐름과 소비 패턴을 확인해요.</div>
+      </div>
+
+      <div class="analysis-summary">
+        <div class="card summary-card">
+          <div class="summary-label">분석 월 지출</div>
+          <div class="summary-value expense" id="analysisExpenseTotal">₩0</div>
+          <div class="summary-sub" id="analysisExpenseChange">전월 대비 -</div>
+        </div>
+        <div class="card summary-card">
+          <div class="summary-label">분석 월 수입</div>
+          <div class="summary-value income" id="analysisIncomeTotal">₩0</div>
+          <div class="summary-sub" id="analysisIncomeChange">전월 대비 -</div>
+        </div>
+        <div class="card summary-card">
+          <div class="summary-label">예산 사용률</div>
+          <div class="summary-value" id="analysisBudgetRate">0%</div>
+          <div class="summary-sub" id="analysisBudgetRemain">남은 예산 ₩0</div>
+        </div>
+        <div class="card summary-card">
+          <div class="summary-label">월 고정비 예정</div>
+          <div class="summary-value" id="analysisFixedTotal">₩0</div>
+          <div class="summary-sub" id="analysisFixedCount">고정비 0개</div>
+        </div>
+      </div>
+
+      <div class="analysis-grid">
+        <div class="card analysis-card">
+          <div class="analysis-title">
+            <div><h2>지출내역 분석</h2><p>카테고리별 지출 비중</p></div>
+            <div class="analysis-total" id="expenseDonutTotal">₩0</div>
+          </div>
+          <div id="expenseDonutArea"></div>
+        </div>
+
+        <div class="card analysis-card">
+          <div class="analysis-title">
+            <div><h2>수입내역 분석</h2><p>카테고리별 수입 비중</p></div>
+            <div class="analysis-total" id="incomeDonutTotal">₩0</div>
+          </div>
+          <div id="incomeDonutArea"></div>
+        </div>
+
+        <div class="card analysis-card analysis-wide">
+          <div class="analysis-title">
+            <div><h2>지출 속도</h2><p>이번 달 누적 지출을 전월 같은 날짜 흐름과 비교해요.</p></div>
+          </div>
+          <div class="chart-legend-inline">
+            <span class="chart-key"><i style="background:#5f58e8"></i><span id="speedCurrentLabel">이번 달</span></span>
+            <span class="chart-key"><i style="background:#a9afba"></i><span id="speedPrevLabel">지난 달</span></span>
+          </div>
+          <div class="speed-chart-wrap" id="speedChart"></div>
+          <div class="speed-footer">
+            <div class="speed-stat"><small id="speedCurrentTitle">이번 달 지출</small><strong id="speedCurrentTotal">₩0</strong></div>
+            <div class="speed-stat"><small id="speedPrevTitle">지난 달 지출</small><strong id="speedPrevTotal">₩0</strong></div>
+          </div>
+        </div>
+
+        <div class="card analysis-card analysis-wide">
+          <div class="fixed-head">
+            <div>
+              <div class="analysis-title" style="margin:0">
+                <div><h2>고정비 관리</h2><p>매달 반복되는 지출을 따로 관리해요.</p></div>
+              </div>
+            </div>
+            <button class="btn primary" onclick="openFixedExpenseModal()">+ 고정비 추가</button>
+          </div>
+          <div id="fixedExpenseArea"></div>
+        </div>
+      </div>
+    </section>
+
     <section id="settingsTab" class="hidden">
       <div class="topbar">
         <div>
@@ -926,6 +1138,7 @@ let cloudUser = null;
 let cloudReady = false;
 let cloudSaveTimer = null;
 let cloudLoadInProgress = false;
+let savingsAutoCheckTimer = null;
 const defaultState = {
   budget: 1500000,
   categories: {
@@ -945,7 +1158,8 @@ const defaultState = {
   },
   transactions: [],
   events: [],
-  savingsAccounts: []
+  savingsAccounts: [],
+  fixedExpenses: []
 };
 
 let state = loadState();
@@ -953,6 +1167,7 @@ let viewDate = new Date();
 viewDate.setDate(1);
 let editingId = null;
 let txType = "expense";
+let fixedEditingId = null;
 
 function normalizeState(parsed){
   parsed = parsed || {};
@@ -965,7 +1180,8 @@ function normalizeState(parsed){
     },
     transactions: parsed.transactions || [],
     events: parsed.events || [],
-    savingsAccounts: parsed.savingsAccounts || []
+    savingsAccounts: parsed.savingsAccounts || [],
+    fixedExpenses: parsed.fixedExpenses || []
   };
 }
 function loadState(){
@@ -1045,8 +1261,14 @@ async function loadCloudState(user){
       if(upsertError) throw upsertError;
     }
     cloudReady=true;
+    const savingsAutoResult=applyAutomaticSavingsDeposits();
+    localStorage.setItem(STORE_KEY,JSON.stringify(state));
     renderAll();
-    setSyncStatus("ok","동기화됨");
+    if(savingsAutoResult.changed){
+      await saveCloudState();
+    }else{
+      setSyncStatus("ok","동기화됨");
+    }
   }catch(err){
     console.error(err);
     cloudReady=false;
@@ -1068,6 +1290,7 @@ async function showAppForSession(session){
   document.getElementById("appRoot").classList.remove("locked");
   document.getElementById("syncEmail").textContent=cloudUser.email || "";
   await loadCloudState(cloudUser);
+  scheduleSavingsAutoCheck();
 }
 async function login(){
   const email=document.getElementById("authEmail").value.trim();
@@ -1097,12 +1320,151 @@ async function signup(){
   }
 }
 async function logout(){
+  clearTimeout(savingsAutoCheckTimer);
   await cloud.auth.signOut();
   cloudUser=null;
   cloudReady=false;
   document.getElementById("syncEmail").textContent="";
   showAuth("로그아웃했어요.");
 }
+
+function localDateString(date=new Date()){
+  const y=date.getFullYear();
+  const m=String(date.getMonth()+1).padStart(2,"0");
+  const d=String(date.getDate()).padStart(2,"0");
+  return `${y}-${m}-${d}`;
+}
+function parseLocalDate(dateStr){
+  if(!dateStr) return null;
+  const parts=String(dateStr).split("-").map(Number);
+  if(parts.length!==3 || parts.some(Number.isNaN)) return null;
+  const d=new Date(parts[0],parts[1]-1,parts[2]);
+  d.setHours(0,0,0,0);
+  return d;
+}
+function savingsTransferDate(year,monthIndex,autoDay){
+  const lastDay=new Date(year,monthIndex+1,0).getDate();
+  const day=Math.min(Math.max(1,Number(autoDay)||1),lastDay);
+  const d=new Date(year,monthIndex,day);
+  d.setHours(0,0,0,0);
+  return d;
+}
+function applyAutomaticSavingsDeposits(){
+  if(!state.savingsAccounts) state.savingsAccounts=[];
+  if(!state.fixedExpenses) state.fixedExpenses=[];
+  const today=new Date();
+  today.setHours(0,0,0,0);
+  const todayStr=localDateString(today);
+  let changed=false;
+  let addedTotal=0;
+  let addedCount=0;
+
+  state.savingsAccounts.forEach(account=>{
+    // 기존 적금은 현재 저장된 금액을 "오늘까지 반영된 금액"으로 간주한다.
+    // 따라서 기능 적용 첫날에 과거 납입액이 중복으로 더해지지 않는다.
+    if(!account.autoCreditThrough){
+      account.autoCreditThrough=todayStr;
+      changed=true;
+      return;
+    }
+
+    const monthlyAmount=Number(account.monthlyAmount||0);
+    const autoDay=Number(account.autoDay||0);
+    const startDate=parseLocalDate(account.startDate);
+    const endDate=parseLocalDate(account.endDate);
+    let baseline=parseLocalDate(account.autoCreditThrough);
+
+    if(!baseline){
+      account.autoCreditThrough=todayStr;
+      changed=true;
+      return;
+    }
+    if(monthlyAmount<=0 || autoDay<1 || autoDay>31 || !startDate) return;
+    if(baseline>=today) return;
+
+    let year=baseline.getFullYear();
+    let month=baseline.getMonth();
+    let dueCount=0;
+    let lastProcessed=null;
+
+    while(
+      year<today.getFullYear() ||
+      (year===today.getFullYear() && month<=today.getMonth())
+    ){
+      const due=savingsTransferDate(year,month,autoDay);
+
+      if(
+        due>baseline &&
+        due>=startDate &&
+        due<=today &&
+        (!endDate || due<=endDate)
+      ){
+        dueCount++;
+        lastProcessed=due;
+      }
+
+      month++;
+      if(month>11){
+        month=0;
+        year++;
+      }
+    }
+
+    if(dueCount>0){
+      const increment=dueCount*monthlyAmount;
+      account.currentAmount=Number(account.currentAmount||0)+increment;
+      account.autoCreditThrough=localDateString(lastProcessed);
+      account.lastAutoDepositDate=localDateString(lastProcessed);
+      changed=true;
+      addedTotal+=increment;
+      addedCount+=dueCount;
+    }
+  });
+
+  return {changed,addedTotal,addedCount};
+}
+function nextSavingsDepositDate(account){
+  const monthlyAmount=Number(account?.monthlyAmount||0);
+  const autoDay=Number(account?.autoDay||0);
+  const startDate=parseLocalDate(account?.startDate);
+  const endDate=parseLocalDate(account?.endDate);
+  if(monthlyAmount<=0 || autoDay<1 || autoDay>31 || !startDate) return null;
+
+  const today=new Date();
+  today.setHours(0,0,0,0);
+  let year=today.getFullYear();
+  let month=today.getMonth();
+
+  for(let i=0;i<36;i++){
+    const due=savingsTransferDate(year,month,autoDay);
+    if(due>today && due>=startDate && (!endDate || due<=endDate)){
+      return localDateString(due);
+    }
+    month++;
+    if(month>11){ month=0; year++; }
+  }
+  return null;
+}
+function scheduleSavingsAutoCheck(){
+  clearTimeout(savingsAutoCheckTimer);
+  if(!cloudUser) return;
+
+  const now=new Date();
+  const next=new Date(now);
+  next.setDate(now.getDate()+1);
+  next.setHours(0,0,5,0);
+
+  savingsAutoCheckTimer=setTimeout(async()=>{
+    const result=applyAutomaticSavingsDeposits();
+    if(result.changed){
+      localStorage.setItem(STORE_KEY,JSON.stringify(state));
+      renderAll();
+      if(cloudReady) await saveCloudState();
+    }
+    scheduleSavingsAutoCheck();
+  },Math.max(1000,next-now));
+}
+
 function fmt(n){ return "₩" + Math.round(Number(n)||0).toLocaleString("ko-KR"); }
 function isoDate(y,m,d){ return `${y}-${String(m+1).padStart(2,"0")}-${String(d).padStart(2,"0")}`; }
 function uid(){ return (crypto.randomUUID ? crypto.randomUUID() : String(Date.now()+Math.random())); }
@@ -1128,6 +1490,7 @@ function renderAll(){
   renderBudgetBars();
   renderRecent();
   renderTxTable();
+  renderAnalysis();
   renderSettings();
 }
 function renderTop(){
@@ -1211,9 +1574,9 @@ function renderRecent(){
   }
   el.innerHTML=txs.map(t=>{
     const c=categoryById(t.type,t.category);
-    return `<div class="tx">
+    return `<div class="tx dashboard-tx clickable-tx" onclick="editTransaction('${t.id}')" title="클릭해서 수정">
       <div class="tx-dot" style="background:${c.color}20;color:${c.color}">${escapeHtml(c.name.slice(0,1))}</div>
-      <div class="tx-main"><strong>${escapeHtml(t.memo||c.name)}</strong><small>${t.date} · ${escapeHtml(c.name)}</small></div>
+      <div class="tx-main"><strong>${escapeHtml(t.memo||c.name)}</strong><small>${t.date} · ${escapeHtml(c.name)} · 클릭해서 수정</small></div>
       <div class="tx-amount ${t.type==="income"?"income":"expense"}">${t.type==="income"?"+":"-"} ${fmt(t.amount)}</div>
     </div>`;
   }).join("");
@@ -1255,6 +1618,248 @@ function refreshCategoryFilter(){
   sel.innerHTML=`<option value="all">전체 카테고리</option>`+all.map(c=>`<option value="${c.id}">${escapeHtml(c.name)}</option>`).join("");
   if([...sel.options].some(o=>o.value===current)) sel.value=current;
 }
+
+function txForMonth(date){
+  const key=monthKey(date);
+  return state.transactions.filter(t=>t.date.startsWith(key));
+}
+function monthTotals(date){
+  const txs=txForMonth(date);
+  return {
+    txs,
+    income:txs.filter(t=>t.type==="income").reduce((s,t)=>s+Number(t.amount||0),0),
+    expense:txs.filter(t=>t.type==="expense").reduce((s,t)=>s+Number(t.amount||0),0)
+  };
+}
+function previousMonth(date){
+  return new Date(date.getFullYear(),date.getMonth()-1,1);
+}
+function pctChange(current,prev){
+  if(!prev) return current?100:0;
+  return ((current-prev)/prev)*100;
+}
+function formatChange(current,prev){
+  if(!prev && !current) return "전월 대비 -";
+  if(!prev) return "전월 대비 신규 발생";
+  const p=pctChange(current,prev);
+  const sign=p>0?"+":"";
+  return `전월 대비 ${sign}${p.toFixed(1)}%`;
+}
+function categoryGroups(type,date){
+  const groups={};
+  txForMonth(date).filter(t=>t.type===type).forEach(t=>{
+    groups[t.category]=(groups[t.category]||0)+Number(t.amount||0);
+  });
+  return Object.entries(groups)
+    .map(([id,amount])=>({id,amount,cat:categoryById(type,id)}))
+    .sort((a,b)=>b.amount-a.amount);
+}
+function makeDonutGradient(items,total){
+  if(!items.length || total<=0) return "#edf0f4";
+  let cursor=0;
+  const pieces=[];
+  items.forEach(item=>{
+    const start=cursor;
+    cursor += item.amount/total*100;
+    pieces.push(`${item.cat.color} ${start.toFixed(2)}% ${cursor.toFixed(2)}%`);
+  });
+  return `conic-gradient(${pieces.join(",")})`;
+}
+function renderDonut(type,targetId,totalId){
+  const items=categoryGroups(type,viewDate);
+  const total=items.reduce((s,x)=>s+x.amount,0);
+  document.getElementById(totalId).textContent=fmt(total);
+  const target=document.getElementById(targetId);
+  if(!items.length){
+    target.innerHTML=`<div class="analysis-empty">${type==="expense"?"지출":"수입"} 내역이 아직 없어요.</div>`;
+    return;
+  }
+  const top=items[0];
+  const gradient=makeDonutGradient(items,total);
+  target.innerHTML=`<div class="donut-layout">
+    <div class="donut-chart" style="background:${gradient}">
+      <div class="donut-center"><small>가장 큰 비중</small><strong>${escapeHtml(top.cat.name)}</strong><small>${Math.round(top.amount/total*100)}%</small></div>
+    </div>
+    <div class="analysis-legend">
+      ${items.map(item=>{
+        const pct=total?Math.round(item.amount/total*100):0;
+        return `<div class="legend-row">
+          <i class="legend-dot" style="background:${item.cat.color}"></i>
+          <span class="legend-name">${escapeHtml(item.cat.name)}</span>
+          <span class="legend-pct">${pct}%</span>
+          <span class="legend-amount">${fmt(item.amount)}</span>
+        </div>`;
+      }).join("")}
+    </div>
+  </div>`;
+}
+function cumulativeExpense(date,maxDays){
+  const y=date.getFullYear(),m=date.getMonth();
+  const actualDays=new Date(y,m+1,0).getDate();
+  const byDay={};
+  txForMonth(date).filter(t=>t.type==="expense").forEach(t=>{
+    const d=Number(t.date.slice(-2));
+    byDay[d]=(byDay[d]||0)+Number(t.amount||0);
+  });
+  let sum=0;
+  const arr=[];
+  for(let d=1;d<=maxDays;d++){
+    if(d<=actualDays) sum+=byDay[d]||0;
+    arr.push(sum);
+  }
+  return arr;
+}
+function svgPath(values,maxValue,width,height,pad){
+  const n=values.length;
+  if(!n) return "";
+  return values.map((v,i)=>{
+    const x=pad+(n===1?0:i*(width-pad*2)/(n-1));
+    const y=height-pad-(maxValue? v/maxValue*(height-pad*2):0);
+    return `${i===0?"M":"L"}${x.toFixed(1)},${y.toFixed(1)}`;
+  }).join(" ");
+}
+function renderSpeedChart(){
+  const prev=previousMonth(viewDate);
+  const maxDays=Math.max(
+    new Date(viewDate.getFullYear(),viewDate.getMonth()+1,0).getDate(),
+    new Date(prev.getFullYear(),prev.getMonth()+1,0).getDate()
+  );
+  const cur=cumulativeExpense(viewDate,maxDays);
+  const old=cumulativeExpense(prev,maxDays);
+  const maxVal=Math.max(...cur,...old,1);
+  const W=760,H=280,P=42;
+  const curPath=svgPath(cur,maxVal,W,H,P);
+  const oldPath=svgPath(old,maxVal,W,H,P);
+  const grid=[];
+  for(let i=0;i<=4;i++){
+    const y=P+(H-P*2)*i/4;
+    const val=maxVal*(4-i)/4;
+    grid.push(`<line x1="${P}" y1="${y}" x2="${W-P}" y2="${y}" stroke="#e6e9ee" stroke-width="1"/>
+      <text x="4" y="${y+4}" font-size="10" fill="#9aa0aa">${Math.round(val/10000)}만</text>`);
+  }
+  const xlabels=[1,Math.ceil(maxDays/2),maxDays].map(day=>{
+    const x=P+(day-1)*(W-P*2)/(maxDays-1);
+    return `<text x="${x}" y="${H-8}" text-anchor="middle" font-size="10" fill="#9aa0aa">${day}일</text>`;
+  }).join("");
+  document.getElementById("speedChart").innerHTML=`<svg viewBox="0 0 ${W} ${H}" aria-label="지출 속도 차트">
+    ${grid.join("")}
+    <path d="${oldPath}" fill="none" stroke="#a9afba" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+    <path d="${curPath}" fill="none" stroke="#5f58e8" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/>
+    ${xlabels}
+  </svg>`;
+  const curT=monthTotals(viewDate).expense;
+  const oldT=monthTotals(prev).expense;
+  const currentName=`${viewDate.getMonth()+1}월`;
+  const prevName=`${prev.getMonth()+1}월`;
+  document.getElementById("speedCurrentLabel").textContent=`${currentName} 지출`;
+  document.getElementById("speedPrevLabel").textContent=`${prevName} 지출`;
+  document.getElementById("speedCurrentTitle").textContent=`${currentName} 지출`;
+  document.getElementById("speedPrevTitle").textContent=`${prevName} 지출`;
+  document.getElementById("speedCurrentTotal").textContent=fmt(curT);
+  document.getElementById("speedPrevTotal").textContent=fmt(oldT);
+}
+function renderFixedExpenses(){
+  if(!state.fixedExpenses) state.fixedExpenses=[];
+  const list=[...state.fixedExpenses].sort((a,b)=>(Number(a.day||99)-Number(b.day||99)));
+  const total=list.reduce((s,x)=>s+Number(x.amount||0),0);
+  document.getElementById("analysisFixedTotal").textContent=fmt(total);
+  document.getElementById("analysisFixedCount").textContent=`고정비 ${list.length}개`;
+  const target=document.getElementById("fixedExpenseArea");
+  if(!list.length){
+    target.innerHTML=`<div class="analysis-empty">등록된 고정비가 없어요. 매달 반복되는 지출을 추가해보세요.</div>`;
+    return;
+  }
+  target.innerHTML=`<div style="display:flex;justify-content:space-between;align-items:end;margin-bottom:14px">
+      <div><small style="color:var(--muted)">월 고정 지출 예상</small><div style="font-size:25px;font-weight:880;margin-top:4px">${fmt(total)}</div></div>
+      <div style="color:var(--muted);font-size:11px">총 ${list.length}개</div>
+    </div>
+    <div class="fixed-list">
+      ${list.map(item=>{
+        const c=categoryById("expense",item.category||"fixed");
+        const pct=total?Math.round(Number(item.amount||0)/total*100):0;
+        return `<div class="fixed-item">
+          <div>
+            <strong>${escapeHtml(item.name||"고정비")}</strong>
+            <small>매월 ${item.day||"-"}일 · ${escapeHtml(c.name)} · ${pct}%</small>
+            <div class="bar" style="margin-top:9px;height:6px"><i style="width:${pct}%;background:${c.color}"></i></div>
+          </div>
+          <div>
+            <div class="fixed-amount">${fmt(item.amount)}</div>
+            <div class="fixed-actions">
+              <button class="action-link" onclick="openFixedExpenseModal('${item.id}')">수정</button>
+              <button class="action-link" onclick="deleteFixedExpense('${item.id}')">삭제</button>
+            </div>
+          </div>
+        </div>`;
+      }).join("")}
+    </div>`;
+}
+function renderAnalysis(){
+  const title=document.getElementById("analysisMonthTitle");
+  if(!title) return;
+  const cur=monthTotals(viewDate);
+  const prevDate=previousMonth(viewDate);
+  const prev=monthTotals(prevDate);
+  title.textContent=`${viewDate.getFullYear()}년 ${viewDate.getMonth()+1}월`;
+  document.getElementById("analysisExpenseTotal").textContent=fmt(cur.expense);
+  document.getElementById("analysisIncomeTotal").textContent=fmt(cur.income);
+  document.getElementById("analysisExpenseChange").textContent=formatChange(cur.expense,prev.expense);
+  document.getElementById("analysisIncomeChange").textContent=formatChange(cur.income,prev.income);
+  const rate=state.budget>0?Math.round(cur.expense/state.budget*100):0;
+  document.getElementById("analysisBudgetRate").textContent=`${rate}%`;
+  document.getElementById("analysisBudgetRemain").textContent=`남은 예산 ${fmt(state.budget-cur.expense)}`;
+  renderDonut("expense","expenseDonutArea","expenseDonutTotal");
+  renderDonut("income","incomeDonutArea","incomeDonutTotal");
+  renderSpeedChart();
+  renderFixedExpenses();
+}
+function openFixedExpenseModal(id=null){
+  fixedEditingId=id;
+  const existing=id?(state.fixedExpenses||[]).find(x=>x.id===id):null;
+  const item=existing||{};
+  const wrap=document.getElementById("txModalWrap");
+  wrap.classList.remove("hidden");
+  wrap.innerHTML=`<div class="modal-backdrop" id="modalBg">
+    <div class="modal">
+      <h3>${existing?"고정비 수정":"고정비 추가"}</h3>
+      <div class="form-grid">
+        <div class="field full"><label>고정비 이름</label><input id="fxName" value="${escapeAttr(item.name||"")}" placeholder="예: 휴대폰 요금, 구독료"></div>
+        <div class="field"><label>월 금액</label><input type="number" id="fxAmount" min="0" value="${item.amount||""}" placeholder="0"></div>
+        <div class="field"><label>결제일</label><input type="number" id="fxDay" min="1" max="31" value="${item.day||""}" placeholder="예: 25"></div>
+        <div class="field full"><label>지출 카테고리</label><select id="fxCategory">${state.categories.expense.map(c=>`<option value="${c.id}" ${c.id===(item.category||"fixed")?"selected":""}>${escapeHtml(c.name)}</option>`).join("")}</select></div>
+      </div>
+      <div class="modal-actions">
+        <button class="btn ghost" id="cancelModal">취소</button>
+        <button class="btn primary" id="saveFixed">${existing?"저장":"추가"}</button>
+      </div>
+    </div>
+  </div>`;
+  document.getElementById("cancelModal").onclick=closeModal;
+  document.getElementById("modalBg").addEventListener("click",e=>{if(e.target.id==="modalBg")closeModal()});
+  document.getElementById("saveFixed").onclick=saveFixedExpense;
+}
+function saveFixedExpense(){
+  const name=document.getElementById("fxName").value.trim();
+  const amount=Number(document.getElementById("fxAmount").value)||0;
+  const day=Number(document.getElementById("fxDay").value)||null;
+  const category=document.getElementById("fxCategory").value;
+  if(!name || !amount || !day){alert("이름, 금액, 결제일을 입력해주세요.");return;}
+  const obj={id:fixedEditingId||uid(),name,amount,day,category};
+  if(fixedEditingId){
+    const idx=state.fixedExpenses.findIndex(x=>x.id===fixedEditingId);
+    if(idx>=0) state.fixedExpenses[idx]=obj;
+  }else{
+    state.fixedExpenses.push(obj);
+  }
+  fixedEditingId=null;
+  saveState(); closeModal(); renderAll();
+}
+function deleteFixedExpense(id){
+  if(!confirm("이 고정비를 삭제할까요?")) return;
+  state.fixedExpenses=(state.fixedExpenses||[]).filter(x=>x.id!==id);
+  saveState(); renderAll();
+}
+
 function renderSettings(){
   document.getElementById("monthlyBudgetInput").value=state.budget||0;
   renderCatList("expense");
@@ -1279,6 +1884,10 @@ function openTransactionModal(prefillDate){
   editingId=null;
   txType="expense";
   renderTransactionModal(prefillDate || isoDate(new Date().getFullYear(),new Date().getMonth(),new Date().getDate()));
+}
+function editTransactionFromDrawer(id){
+  closeDayDrawer();
+  editTransaction(id);
 }
 function editTransaction(id){
   const t=state.transactions.find(x=>x.id===id);
@@ -1366,9 +1975,9 @@ function openDayDrawer(dateStr){
       <div class="transaction-list">
         ${txs.length?txs.map(t=>{
           const c=categoryById(t.type,t.category);
-          return `<div class="tx">
+          return `<div class="tx clickable-tx" onclick="editTransactionFromDrawer('${t.id}')" title="클릭해서 수정">
             <div class="tx-dot" style="background:${c.color}20;color:${c.color}">${escapeHtml(c.name.slice(0,1))}</div>
-            <div class="tx-main"><strong>${escapeHtml(t.memo||c.name)}</strong><small>${escapeHtml(c.name)}</small></div>
+            <div class="tx-main"><strong>${escapeHtml(t.memo||c.name)}</strong><small>${escapeHtml(c.name)} · 클릭해서 수정</small></div>
             <div class="tx-amount ${t.type==="income"?"income":"expense"}">${t.type==="income"?"+":"-"} ${fmt(t.amount)}</div>
           </div>`;
         }).join(""):`<div class="empty-state">등록된 내역이 없어요.</div>`}
@@ -1440,6 +2049,11 @@ function renderSavingsAccount(a){
       <div class="saving-info"><small>월 납입액</small><strong>${a.monthlyAmount?fmt(a.monthlyAmount):"-"}</strong></div>
       <div class="saving-info"><small>현재까지 모은 금액</small><strong>${fmt(current)}</strong></div>
       <div class="saving-info"><small>만기 예상 수령액</small><strong>${expected?fmt(expected):"-"}</strong></div>
+      <div class="saving-info"><small>자동 반영 기준</small><strong>${a.autoCreditThrough||"오늘부터"}</strong></div>
+      <div class="saving-info"><small>다음 자동 반영</small><strong>${nextSavingsDepositDate(a)||"만기/미설정"}</strong></div>
+    </div>
+    <div style="margin-top:10px;color:var(--muted);font-size:10px;line-height:1.5">
+      자동이체일이 지나면 월 납입액이 현재 모은 금액에 자동 반영됩니다.
     </div>
     <div class="saving-progress">
       <div class="saving-progress-top"><span>예상 수령액 대비</span><span>${pct}%</span></div>
@@ -1493,7 +2107,9 @@ function openSavingsModal(id=null){
       currentAmount:Number(document.getElementById("svCurrent").value)||0,
       monthlyAmount:Number(document.getElementById("svMonthly").value)||0,
       autoDay:Number(document.getElementById("svAutoDay").value)||null,
-      expectedAmount:Number(document.getElementById("svExpected").value)||0
+      expectedAmount:Number(document.getElementById("svExpected").value)||0,
+      autoCreditThrough:localDateString(new Date()),
+      lastAutoDepositDate:existing?.lastAutoDepositDate||null
     };
     if(existing){
       const idx=state.savingsAccounts.findIndex(x=>x.id===existing.id);
@@ -1554,6 +2170,7 @@ document.querySelectorAll(".nav button").forEach(btn=>btn.addEventListener("clic
   btn.classList.add("active");
   document.getElementById("dashboardTab").classList.toggle("hidden",btn.dataset.tab!=="dashboard");
   document.getElementById("transactionsTab").classList.toggle("hidden",btn.dataset.tab!=="transactions");
+  document.getElementById("analysisTab").classList.toggle("hidden",btn.dataset.tab!=="analysis");
   document.getElementById("settingsTab").classList.toggle("hidden",btn.dataset.tab!=="settings");
 }));
 document.querySelectorAll("[data-go]").forEach(btn=>btn.addEventListener("click",()=>{
@@ -1561,6 +2178,8 @@ document.querySelectorAll("[data-go]").forEach(btn=>btn.addEventListener("click"
 }));
 document.getElementById("prevMonth").onclick=()=>{viewDate.setMonth(viewDate.getMonth()-1);renderAll()};
 document.getElementById("nextMonth").onclick=()=>{viewDate.setMonth(viewDate.getMonth()+1);renderAll()};
+document.getElementById("analysisPrevMonth").onclick=()=>{viewDate.setMonth(viewDate.getMonth()-1);renderAll()};
+document.getElementById("analysisNextMonth").onclick=()=>{viewDate.setMonth(viewDate.getMonth()+1);renderAll()};
 document.getElementById("addTxBtn").onclick=()=>openTransactionModal();
 document.getElementById("addTxBtn2").onclick=()=>openTransactionModal();
 document.getElementById("currentSavingsCard").onclick=openSavingsDrawer;
