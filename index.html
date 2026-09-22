@@ -741,18 +741,16 @@
     align-items:center;
   }
   .donut-chart{
-    width:190px;height:190px;border-radius:50%;
+    width:190px;
+    height:190px;
+    border-radius:50%;
     margin:auto;
     position:relative;
     background:#edf0f4;
+    overflow:visible;
   }
   .donut-chart:after{
-    content:"";
-    position:absolute;
-    inset:39px;
-    background:#fff;
-    border-radius:50%;
-    box-shadow:0 0 0 1px rgba(230,232,237,.5);
+    content:none;
   }
   .donut-center{
     position:absolute;
@@ -795,6 +793,7 @@
     width:100%;
     height:100%;
     z-index:1;
+    overflow:visible;
   }
   .donut-segment{
     cursor:pointer;
@@ -802,7 +801,6 @@
   }
   .donut-segment:hover{
     opacity:.82;
-    stroke-width:31;
   }
   .category-detail-summary{
     display:grid;
@@ -905,7 +903,6 @@
     .analysis-summary{grid-template-columns:1fr 1fr}
     .donut-layout{grid-template-columns:1fr}
     .donut-chart{width:170px;height:170px}
-    .donut-chart:after{inset:35px}
     .speed-footer{grid-template-columns:1fr}
     .analysis-card{padding:18px}
     .legend-row{grid-template-columns:12px minmax(0,1fr) auto auto}
@@ -1743,11 +1740,13 @@ function makeDonutGradient(items,total){
 }
 function donutSvg(items,total,type){
   if(!items.length || total<=0) return "";
-  const r=44;
+  const r=36;
+  const stroke=24;
   const circumference=2*Math.PI*r;
   let offset=0;
+
   return `<svg class="donut-svg" viewBox="0 0 100 100" aria-label="카테고리 비중 차트">
-    <circle cx="50" cy="50" r="${r}" fill="none" stroke="#edf0f4" stroke-width="28"></circle>
+    <circle cx="50" cy="50" r="${r}" fill="none" stroke="#edf0f4" stroke-width="${stroke}"></circle>
     ${items.map(item=>{
       const length=item.amount/total*circumference;
       const dashOffset=-offset;
@@ -1758,9 +1757,10 @@ function donutSvg(items,total,type){
         cx="50" cy="50" r="${r}"
         fill="none"
         stroke="${item.cat.color}"
-        stroke-width="28"
-        stroke-dasharray="${length.toFixed(3)} ${(circumference-length).toFixed(3)}"
-        stroke-dashoffset="${dashOffset.toFixed(3)}"
+        stroke-width="${stroke}"
+        stroke-linecap="butt"
+        stroke-dasharray="${length.toFixed(4)} ${(circumference-length).toFixed(4)}"
+        stroke-dashoffset="${dashOffset.toFixed(4)}"
         transform="rotate(-90 50 50)"
         onclick="openCategoryDetail('${type}','${item.id}')"
       ><title>${escapeHtml(item.cat.name)} ${pct}% · ${fmt(item.amount)}</title></circle>`;
@@ -1858,7 +1858,7 @@ function renderDonut(type,targetId,totalId){
   }
   const top=items[0];
   target.innerHTML=`<div class="donut-layout">
-    <div class="donut-chart" style="background:#edf0f4">
+    <div class="donut-chart">
       ${donutSvg(items,total,type)}
       <div class="donut-center"><small>가장 큰 비중</small><strong>${escapeHtml(top.cat.name)}</strong><small>${Math.round(top.amount/total*100)}%</small></div>
     </div>
