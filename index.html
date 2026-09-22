@@ -495,10 +495,33 @@
   .cat-list{display:flex;flex-direction:column;gap:8px}
   .cat-item{
     display:grid;
-    grid-template-columns:34px 1fr auto;
+    grid-template-columns:28px 34px 1fr auto;
     gap:8px;
     align-items:center;
+    border-radius:10px;
+    transition:background .15s ease, box-shadow .15s ease;
   }
+  .cat-item.sortable-chosen{
+    background:#f5f6fa;
+    box-shadow:0 6px 18px rgba(20,24,35,.08);
+  }
+  .cat-item.sortable-ghost{
+    opacity:.35;
+  }
+  .drag-handle{
+    width:28px;
+    height:32px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    color:#a2a8b2;
+    cursor:grab;
+    user-select:none;
+    touch-action:none;
+    font-size:18px;
+    line-height:1;
+  }
+  .drag-handle:active{cursor:grabbing}
   .cat-item input[type=color]{
     width:32px;height:32px;border:0;background:transparent;padding:0;
   }
@@ -1195,6 +1218,7 @@
 <div id="savingsDrawerWrap" class="hidden"></div>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="https://cdn.jsdelivr.net/npm/sortablejs@1.15.6/Sortable.min.js"></script>
 <script>
 const STORE_KEY = "money_note_v1";
 const SUPABASE_URL = "https://lficvilwbeqvttqcfhfg.supabase.co";
@@ -2067,12 +2091,55 @@ function renderSettings(){
 function renderCatList(type){
   const el=document.getElementById(type==="expense"?"expenseCats":"incomeCats");
   el.innerHTML=state.categories[type].map((c,idx)=>`
-    <div class="cat-item" data-type="${type}" data-index="${idx}">
+    <div class="cat-item" data-type="${type}" data-index="${idx}" data-cat-id="${escapeAttr(c.id)}">
+      <span class="drag-handle" title="드래그해서 순서 변경">⋮⋮</span>
       <input type="color" value="${c.color}" data-field="color">
       <input type="text" value="${escapeAttr(c.name)}" data-field="name">
       <button class="delete-cat" onclick="removeCategory('${type}',${idx})">삭제</button>
     </div>`).join("");
+  initCategorySortable(type);
 }
+
+function initCategorySortable(type){
+  const el=document.getElementById(type==="expense"?"expenseCats":"incomeCats");
+  if(!el || !window.Sortable) return;
+
+  if(el._sortableInstance){
+    el._sortableInstance.destroy();
+  }
+
+  el._sortableInstance=Sortable.create(el,{
+    animation:160,
+    handle:".drag-handle",
+    ghostClass:"sortable-ghost",
+    chosenClass:"sortable-chosen",
+    fallbackOnBody:true,
+    swapThreshold:.65,
+    delayOnTouchOnly:true,
+    delay:120,
+    touchStartThreshold:4,
+    onEnd:()=>{
+      // 텍스트/색상 변경값 먼저 현재 state에 반영
+      el.querySelectorAll(".cat-item").forEach(item=>{
+        const id=item.dataset.catId;
+        const cat=state.categories[type].find(c=>c.id===id);
+        if(!cat) return;
+        cat.name=item.querySelector('[data-field="name"]').value.trim()||"이름 없음";
+        cat.color=item.querySelector('[data-field="color"]').value;
+      });
+
+      // 화면에 놓인 순서대로 배열 자체를 재정렬
+      const orderedIds=[...el.querySelectorAll(".cat-item")].map(item=>item.dataset.catId);
+      state.categories[type]=orderedIds
+        .map(id=>state.categories[type].find(c=>c.id===id))
+        .filter(Boolean);
+
+      saveState();
+      renderAll();
+    }
+  });
+}
+
 function removeCategory(type,index){
   if(state.categories[type].length<=1){ alert("카테고리는 최소 1개 필요해요."); return; }
   state.categories[type].splice(index,1);
@@ -2334,9 +2401,12 @@ function deleteSavingsAccount(id){
 function saveSettings(){
   state.budget=Number(document.getElementById("monthlyBudgetInput").value)||0;
   document.querySelectorAll(".cat-item").forEach(item=>{
-    const type=item.dataset.type, idx=Number(item.dataset.index);
-    state.categories[type][idx].name=item.querySelector('[data-field="name"]').value.trim()||"이름 없음";
-    state.categories[type][idx].color=item.querySelector('[data-field="color"]').value;
+    const type=item.dataset.type;
+    const id=item.dataset.catId;
+    const cat=state.categories[type].find(c=>c.id===id);
+    if(!cat) return;
+    cat.name=item.querySelector('[data-field="name"]').value.trim()||"이름 없음";
+    cat.color=item.querySelector('[data-field="color"]').value;
   });
   saveState(); renderAll(); alert("설정을 저장했어요.");
 }
